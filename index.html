@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>豆腐制作四步骤｜点击配对游戏</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>豆腐制作四步骤｜点击放入游戏</title>
 
 <style>
 *{box-sizing:border-box}
@@ -12,22 +12,26 @@ body{
 margin:0;
 font-family:Arial,"Microsoft YaHei",sans-serif;
 background:linear-gradient(135deg,#f5f2ff,#fff8ed);
-color:#302a45;
+color:#302a45
 }
 
 header{
-background:white;
-padding:15px 20px;
+background:#fff;
+padding:16px 24px;
 display:flex;
 align-items:center;
-gap:15px;
+gap:18px;
 box-shadow:0 3px 15px #0001;
+position:sticky;
+top:0;
+z-index:5
 }
 
 .logo{
 font-weight:900;
 color:#6547e8;
-font-size:21px;
+font-size:22px;
+white-space:nowrap
 }
 
 .progress{
@@ -35,68 +39,69 @@ height:10px;
 background:#ebe8f7;
 border-radius:20px;
 overflow:hidden;
-flex:1;
+flex:1
 }
 
 .bar{
 height:100%;
-width:0%;
+width:0;
 background:#6547e8;
-transition:.3s;
+transition:.3s
 }
 
 .score{
 font-weight:900;
 color:#6547e8;
+white-space:nowrap
 }
 
 main{
 max-width:1100px;
 margin:auto;
-padding:25px 18px 40px;
+padding:24px 18px 40px
 }
 
 .title{
 text-align:center;
-margin-bottom:18px;
+margin-bottom:18px
 }
 
 h1{
 margin:0;
 color:#4a398d;
-font-size:clamp(27px,5vw,40px);
+font-size:clamp(27px,5vw,40px)
 }
 
 .subtitle{
 color:#756d80;
-margin-top:7px;
+margin-top:7px
 }
 
 .instructions{
-background:white;
+background:#fff;
 border-radius:18px;
 padding:16px;
 text-align:center;
 box-shadow:0 5px 18px #0001;
 margin-bottom:18px;
-line-height:1.7;
+line-height:1.7
 }
 
 .instructions b{
-color:#6547e8;
+color:#6547e8
 }
 
 .board{
 background:#ffffffdf;
 border-radius:26px;
 padding:20px;
-box-shadow:0 10px 30px #0002;
+box-shadow:0 10px 30px #0002
 }
 
 .steps{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:14px;
+gap:14px
 }
 
 .slot{
@@ -105,13 +110,31 @@ border:3px dashed #cfc9df;
 border-radius:20px;
 background:#faf9ff;
 padding:12px;
+cursor:pointer;
+transition:.2s
+}
+
+.slot:hover{
+border-color:#9c8bf0;
+background:#f5f2ff
+}
+
+.slot.selected-slot{
+border-color:#6547e8;
+background:#f0edff;
+box-shadow:0 0 0 4px #6547e833
+}
+
+.slot.correct{
+border-color:#39b66c;
+background:#edfff3
 }
 
 .slot h2{
 text-align:center;
 font-size:18px;
 color:#6547e8;
-margin:3px 0 10px;
+margin:3px 0 10px
 }
 
 .dropzone{
@@ -120,41 +143,45 @@ display:flex;
 flex-direction:column;
 gap:8px;
 align-items:center;
-justify-content:center;
+justify-content:center
 }
 
 .hint{
 color:#aaa3b3;
 text-align:center;
-font-size:14px;
+font-size:14px
 }
 
 .placed{
 width:100%;
 padding:7px;
 border-radius:12px;
-background:white;
-border:2px solid #39b66c;
+background:#fff;
+border:2px solid #e7e2f0;
 text-align:center;
-font-weight:800;
+font-weight:800
 }
 
 .placed.photo{
 height:115px;
 overflow:hidden;
-padding:0;
+padding:0
 }
 
 .placed.photo img{
 width:100%;
 height:100%;
 object-fit:cover;
-border-radius:10px;
+border-radius:10px
 }
 
 .placed.word{
-font-size:17px;
-background:#edfff3;
+font-size:17px
+}
+
+.placed.good{
+border-color:#39b66c;
+background:#edfff3
 }
 
 .poolTitle{
@@ -162,17 +189,28 @@ text-align:center;
 margin:24px 0 12px;
 color:#4a398d;
 font-size:20px;
-font-weight:900;
+font-weight:900
 }
 
 .pool{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:13px;
+gap:13px
+}
+
+.wordTitle{
+margin-top:20px
+}
+
+.wordTitle+.pool .card{
+min-height:58px;
+display:flex;
+align-items:center;
+justify-content:center
 }
 
 .card{
-background:white;
+background:#fff;
 border:2px solid #e2deec;
 border-radius:18px;
 padding:10px;
@@ -180,42 +218,45 @@ cursor:pointer;
 user-select:none;
 box-shadow:0 4px 12px #0002;
 transition:.18s;
+-webkit-user-select:none;
+-webkit-touch-callout:none
 }
 
 .card:hover{
 transform:translateY(-3px);
-border-color:#9c8bf0;
+border-color:#9c8bf0
 }
 
 .card.selected{
 border-color:#6547e8;
 background:#f0edff;
-box-shadow:0 0 0 3px #6547e833;
+transform:translateY(-3px);
+box-shadow:0 0 0 3px #6547e833
 }
 
 .card.used{
-opacity:.25;
-pointer-events:none;
+opacity:.3;
+pointer-events:none
 }
 
 .pic{
 height:120px;
 overflow:hidden;
 border-radius:12px;
-background:#eee;
+background:#eee
 }
 
 .pic img{
 width:100%;
 height:100%;
-object-fit:cover;
+object-fit:cover
 }
 
 .word{
 font-weight:900;
 text-align:center;
-padding:12px 4px;
-font-size:17px;
+padding:9px 4px;
+font-size:17px
 }
 
 .message{
@@ -223,48 +264,48 @@ min-height:35px;
 text-align:center;
 font-size:20px;
 font-weight:900;
-margin-top:18px;
+margin-top:18px
 }
 
 .success{
-color:#178046;
+color:#178046
 }
 
 .error{
-color:#c43b3b;
+color:#c43b3b
 }
 
 .bottom{
 text-align:center;
-margin-top:18px;
+margin-top:18px
 }
 
 button{
 border:0;
 background:#6547e8;
-color:white;
+color:#fff;
 border-radius:14px;
 padding:11px 18px;
 font-weight:900;
 cursor:pointer;
-font-size:16px;
+font-size:16px
 }
 
 .note{
 font-size:12px;
 color:#81788b;
 text-align:center;
-margin-top:12px;
+margin-top:12px
 }
 
 @media(max-width:800px){
 
 .steps{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr)
 }
 
 .pool{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr)
 }
 
 }
@@ -272,20 +313,20 @@ grid-template-columns:repeat(2,1fr);
 @media(max-width:500px){
 
 .steps{
-grid-template-columns:1fr;
+grid-template-columns:1fr
 }
 
 .pool{
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(2,1fr)
 }
 
 header{
-flex-wrap:wrap;
+flex-wrap:wrap
 }
 
 .progress{
 order:3;
-flex-basis:100%;
+flex-basis:100%
 }
 
 }
@@ -315,7 +356,7 @@ flex-basis:100%;
 <h1>🥣 豆腐制作四步骤</h1>
 
 <div class="subtitle">
-真实照片版 · 点击配一配！
+真实照片版 · 点击放入！
 </div>
 
 </div>
@@ -324,15 +365,21 @@ flex-basis:100%;
 
 <b>🎮 玩法：</b>
 
-先点击一张图片，再点击一个词语。
+先点击一张图片或一个词语，
+再点击上方正确的步骤格子。
 
 <br>
 
-如果图片和词语属于同一个步骤，就会自动配对成功！✨
+图片和词语都使用相同的操作方式。
 
 <br>
 
-📱 手机直接点击即可，不需要拖动。
+📱 手机直接点击即可，不需要拖动！
+
+<br>
+
+每一步要放入
+<strong>1张照片＋1个词语</strong>。✨
 
 </div>
 
@@ -340,19 +387,23 @@ flex-basis:100%;
 
 <div id="steps" class="steps"></div>
 
+
 <div class="poolTitle">
-🖼️ 点击选择图片
+🖼️ 点击图片 → 再点击步骤格
 </div>
 
 <div id="photoPool" class="pool"></div>
 
-<div class="poolTitle">
-📝 点击选择词语
+
+<div class="poolTitle wordTitle">
+📝 点击词语 → 再点击步骤格
 </div>
 
 <div id="wordPool" class="pool"></div>
 
+
 <div id="message" class="message"></div>
+
 
 <div class="bottom">
 
@@ -361,6 +412,7 @@ flex-basis:100%;
 </button>
 
 </div>
+
 
 <div class="note">
 照片来自公开网页资料；游戏需要联网才能显示网上照片。
@@ -372,7 +424,7 @@ flex-basis:100%;
 
 <script>
 
-const data = [
+const data=[
 
 {
 id:"s1",
@@ -404,16 +456,24 @@ img:"https://tokyo-kitchen.icook.network/uploads/step/cover/245410/ea84e2e846ae3
 
 ];
 
+
 let score=0;
-let selectedPhoto=null;
-let selectedWord=null;
-let completed=[];
+
+let selectedItem=null;
+
+let selectedType=null;
+
+let placedPhotos={};
+
+let placedWords={};
 
 
 function shuffle(array){
 
 return [...array].sort(function(){
+
 return Math.random()-0.5;
+
 });
 
 }
@@ -422,182 +482,333 @@ return Math.random()-0.5;
 function render(){
 
 const steps=document.getElementById("steps");
+
 const photoPool=document.getElementById("photoPool");
+
 const wordPool=document.getElementById("wordPool");
 
+
 steps.innerHTML="";
+
 photoPool.innerHTML="";
+
 wordPool.innerHTML="";
 
+
+/* 创建上面的步骤格 */
 
 data.forEach(function(item){
 
 const slot=document.createElement("div");
 
 slot.className="slot";
+
 slot.id=item.id;
 
+
 slot.innerHTML=
+
 "<h2>"+item.title+"</h2>"+
+
 "<div class='dropzone'>"+
-"<div class='hint'>点击图片和词语进行配对</div>"+
+
+"<div class='hint'>点击图片或词语，再点击这里</div>"+
+
 "</div>";
+
+
+slot.onclick=function(){
+
+putIntoSlot(item.id);
+
+};
+
 
 steps.appendChild(slot);
 
 });
 
 
+/* 创建图片 */
+
 shuffle(data).forEach(function(item){
 
 const card=document.createElement("div");
 
 card.className="card";
+
 card.dataset.id=item.id;
 
+
 card.innerHTML=
+
 "<div class='pic'>"+
+
 "<img src='"+item.img+"' alt='"+item.word+"'>"+
+
 "</div>";
 
-card.onclick=function(){
 
-selectPhoto(card,item.id);
+card.onclick=function(event){
+
+event.stopPropagation();
+
+selectItem(item.id,"photo",card);
 
 };
+
 
 photoPool.appendChild(card);
 
 });
 
 
+/* 创建词语 */
+
 shuffle(data).forEach(function(item){
 
 const card=document.createElement("div");
 
 card.className="card";
+
 card.dataset.id=item.id;
 
+
 card.innerHTML=
+
 "<div class='word'>"+
+
 item.word+
+
 "</div>";
 
-card.onclick=function(){
 
-selectWord(card,item.id);
+card.onclick=function(event){
+
+event.stopPropagation();
+
+selectItem(item.id,"word",card);
 
 };
+
 
 wordPool.appendChild(card);
 
 });
+
 
 updateProgress();
 
 }
 
 
-function selectPhoto(card,id){
+/* 选择图片或词语 */
 
-if(completed.includes(id)){
+function selectItem(id,type,card){
+
+/* 已经放进去就不能再选择 */
+
+if(type==="photo" && placedPhotos[id]){
+
 return;
+
 }
 
-document.querySelectorAll("#photoPool .card")
+if(type==="word" && placedWords[id]){
+
+return;
+
+}
+
+
+/* 清除之前选择 */
+
+document.querySelectorAll(".card")
 .forEach(function(c){
 
 c.classList.remove("selected");
 
 });
 
+
+/* 选择当前项目 */
+
 card.classList.add("selected");
 
-selectedPhoto=id;
+selectedItem=id;
 
-checkPair();
+selectedType=type;
+
+
+const message=document.getElementById("message");
+
+message.className="message";
+
+message.innerHTML=
+"👆 现在点击上面的正确步骤格子";
+
 
 }
 
 
-function selectWord(card,id){
+/* 点击步骤格 */
 
-if(completed.includes(id)){
+function putIntoSlot(slotId){
+
+if(!selectedItem){
+
+const message=document.getElementById("message");
+
+message.className="message error";
+
+message.innerHTML=
+"👆 请先点击一张图片或一个词语！";
+
 return;
+
 }
 
-document.querySelectorAll("#wordPool .card")
-.forEach(function(c){
 
-c.classList.remove("selected");
+const item=data.find(function(x){
+
+return x.id===selectedItem;
 
 });
 
-card.classList.add("selected");
-
-selectedWord=id;
-
-checkPair();
-
-}
-
-
-function checkPair(){
-
-if(!selectedPhoto || !selectedWord){
-return;
-}
 
 const message=document.getElementById("message");
 
 
-if(selectedPhoto===selectedWord){
+/* 检查是否已经有同类型内容 */
 
-const item=data.find(function(x){
+if(selectedType==="photo" && placedPhotos[slotId]){
 
-return x.id===selectedPhoto;
+message.className="message error";
 
-});
+message.innerHTML=
+"⚠️ 这个步骤已经有图片了！";
 
-completed.push(item.id);
-
-score+=2;
-
-const slot=document.getElementById(item.id);
-
-const zone=slot.querySelector(".dropzone");
-
-zone.innerHTML=
-"<div class='placed photo'>"+
-"<img src='"+item.img+"'>"+
-"</div>"+
-"<div class='placed word'>"+
-item.word+
-"</div>";
-
-slot.style.borderColor="#39b66c";
-slot.style.background="#edfff3";
-
-
-document.querySelectorAll("#photoPool .card")
-.forEach(function(card){
-
-if(card.dataset.id===item.id){
-
-card.classList.remove("selected");
-card.classList.add("used");
+return;
 
 }
 
-});
+
+if(selectedType==="word" && placedWords[slotId]){
+
+message.className="message error";
+
+message.innerHTML=
+"⚠️ 这个步骤已经有词语了！";
+
+return;
+
+}
 
 
-document.querySelectorAll("#wordPool .card")
+/* 检查是否放对 */
+
+if(slotId!==selectedItem){
+
+message.className="message error";
+
+message.innerHTML=
+"❌ 放错了！请放到正确的步骤。";
+
+document.getElementById(slotId)
+.classList.add("selected-slot");
+
+
+setTimeout(function(){
+
+document.getElementById(slotId)
+.classList.remove("selected-slot");
+
+},700);
+
+return;
+
+}
+
+
+/* 放置成功 */
+
+if(selectedType==="photo"){
+
+placedPhotos[slotId]=true;
+
+}
+
+else{
+
+placedWords[slotId]=true;
+
+}
+
+
+score+=1;
+
+
+/* 把内容放进格子 */
+
+const slot=document.getElementById(slotId);
+
+const zone=slot.querySelector(".dropzone");
+
+
+/* 删除提示文字 */
+
+const hint=zone.querySelector(".hint");
+
+if(hint){
+
+hint.remove();
+
+}
+
+
+/* 创建图片 */
+
+if(selectedType==="photo"){
+
+const placed=document.createElement("div");
+
+placed.className="placed photo good";
+
+placed.innerHTML=
+"<img src='"+item.img+"' alt='"+item.word+"'>";
+
+zone.appendChild(placed);
+
+}
+
+
+/* 创建词语 */
+
+if(selectedType==="word"){
+
+const placed=document.createElement("div");
+
+placed.className="placed word good";
+
+placed.textContent=item.word;
+
+zone.appendChild(placed);
+
+}
+
+
+slot.classList.add("correct");
+
+
+/* 让已经使用的卡片变淡 */
+
+document.querySelectorAll(".card")
 .forEach(function(card){
 
-if(card.dataset.id===item.id){
+if(card.dataset.id===selectedItem){
 
 card.classList.remove("selected");
+
 card.classList.add("used");
 
 }
@@ -606,20 +817,27 @@ card.classList.add("used");
 
 
 message.className="message success";
-message.innerHTML="🎉 配对正确！";
 
-selectedPhoto=null;
-selectedWord=null;
+message.innerHTML=
+"🎉 放置正确！";
+
+
+selectedItem=null;
+
+selectedType=null;
+
 
 updateProgress();
 
 
-if(completed.length===data.length){
+/* 全部完成 */
+
+if(score===8){
 
 setTimeout(function(){
 
 message.innerHTML=
-"🏆 恭喜你！全部配对完成！🎊";
+"🏆 恭喜你！全部完成！🎊";
 
 },500);
 
@@ -627,33 +845,8 @@ message.innerHTML=
 
 }
 
-else{
 
-message.className="message error";
-
-message.innerHTML=
-"❌ 配错了！再试一次～";
-
-setTimeout(function(){
-
-document.querySelectorAll(".card.selected")
-.forEach(function(c){
-
-c.classList.remove("selected");
-
-});
-
-selectedPhoto=null;
-selectedWord=null;
-
-message.innerHTML="";
-
-},800);
-
-}
-
-}
-
+/* 更新进度 */
 
 function updateProgress(){
 
@@ -667,15 +860,19 @@ percent+"%";
 }
 
 
+/* 重新开始 */
+
 function resetGame(){
 
 score=0;
 
-selectedPhoto=null;
+selectedItem=null;
 
-selectedWord=null;
+selectedType=null;
 
-completed=[];
+placedPhotos={};
+
+placedWords={};
 
 document.getElementById("message").innerHTML="";
 
@@ -683,6 +880,8 @@ render();
 
 }
 
+
+/* 开始 */
 
 render();
 
