@@ -16,7 +16,7 @@ main{max-width:1100px;margin:auto;padding:24px 18px 40px}.title{text-align:cente
 .slot h2{text-align:center;font-size:18px;color:#6547e8;margin:3px 0 10px}.dropzone{min-height:190px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center}.hint{color:#aaa3b3;text-align:center;font-size:14px}
 .placed{width:100%;padding:7px;border-radius:12px;background:#fff;border:2px solid #e7e2f0;text-align:center;font-weight:800}.placed.photo{height:115px;overflow:hidden;padding:0}.placed.photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}.placed.word{font-size:17px}.placed.good{border-color:#39b66c;background:#edfff3}
 .poolTitle{text-align:center;margin:24px 0 12px;color:#4a398d;font-size:20px;font-weight:900}.pool{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.wordTitle{margin-top:20px}.wordTitle+.pool .card{min-height:58px;display:flex;align-items:center;justify-content:center}
-.card{background:#fff;border:2px solid #e2deec;border-radius:18px;padding:10px;cursor:grab;user-select:none;box-shadow:0 4px 12px #0002;transition:.18s}.card:hover{transform:translateY(-3px);border-color:#9c8bf0}.card:active{cursor:grabbing}.card.used{opacity:.22;pointer-events:none}
+.card{background:#fff;border:2px solid #e2deec;border-radius:18px;padding:10px;cursor:grab;user-select:none;box-shadow:0 4px 12px #0002;transition:.18s;touch-action:none;-webkit-user-select:none;-webkit-touch-callout:none}.card:hover{transform:translateY(-3px);border-color:#9c8bf0}.card:active{cursor:grabbing}.card.used{opacity:.22;pointer-events:none}
 .pic{height:120px;overflow:hidden;border-radius:12px;background:#eee}.pic img{width:100%;height:100%;object-fit:cover}.word{font-weight:900;text-align:center;padding:9px 4px;font-size:17px}
 .bottom{text-align:center;margin-top:18px}button{border:0;background:#6547e8;color:#fff;border-radius:14px;padding:11px 18px;font-weight:900;cursor:pointer}.message{min-height:30px;text-align:center;font-size:20px;font-weight:900;margin-top:14px}.success{color:#178046}.error{color:#c43b3b}
 .note{font-size:12px;color:#81788b;text-align:center;margin-top:12px}
@@ -27,7 +27,7 @@ main{max-width:1100px;margin:auto;padding:24px 18px 40px}.title{text-align:cente
 <header><div class="logo">⚡ TOFU MATCH</div><div class="progress"><div id="bar" class="bar"></div></div><div class="score">⭐ <span id="score">0</span>/8</div></header>
 <main>
 <div class="title"><h1>🥣 豆腐制作四步骤</h1><div class="subtitle">真实照片版 · 拖一拖・配一配！</div></div>
-<div class="instructions"><b>玩法：</b>上方是空白步骤区。把下方<strong>打乱的真实照片和词语</strong>拖到正确步骤。每一步要配好 <strong>1张照片＋1个词语</strong>。✨</div>
+<div class="instructions"><b>玩法：</b>上方是空白步骤区。把下方<strong>打乱的真实照片和词语</strong>拖到正确步骤。<br><span style="font-size:14px;color:#756d80">📱 手机：按住图片或词语，拖到上方正确步骤；电脑：直接拖动。</span>每一步要配好 <strong>1张照片＋1个词语</strong>。✨</div>
 <div class="board">
 <div id="steps" class="steps"></div>
 <div class="poolTitle">⬇️ 打乱的图片</div>
@@ -65,6 +65,52 @@ function resetGame(){
     ? `<div class="pic"><img src="${c.text}" alt="豆腐制作真实照片"></div>`
     : `<div class="word">${c.text}</div>`;
   card.ondragstart=e=>{e.dataTransfer.setData("id",c.id);e.dataTransfer.setData("type",c.type)};
+  // Mobile touch dragging: HTML5 drag-and-drop is not reliably supported on phones.
+  let touchClone=null, touchDragging=false;
+  card.addEventListener("touchstart", e=>{
+    if(card.classList.contains("used")) return;
+    const t=e.touches[0];
+    touchDragging=true;
+    card.style.opacity=".35";
+    touchClone=card.cloneNode(true);
+    touchClone.className="card touch-drag-clone";
+    touchClone.style.cssText=`position:fixed;left:${t.clientX-55}px;top:${t.clientY-55}px;width:${Math.min(card.getBoundingClientRect().width,220)}px;z-index:9999;pointer-events:none;opacity:.92;transform:scale(1.04);`;
+    document.body.appendChild(touchClone);
+    e.preventDefault();
+  }, {passive:false});
+  card.addEventListener("touchmove", e=>{
+    if(!touchDragging) return;
+    const t=e.touches[0];
+    if(touchClone){
+      touchClone.style.left=(t.clientX-touchClone.offsetWidth/2)+"px";
+      touchClone.style.top=(t.clientY-touchClone.offsetHeight/2)+"px";
+    }
+    const under=document.elementFromPoint(t.clientX,t.clientY);
+    document.querySelectorAll(".slot").forEach(s=>s.classList.remove("over"));
+    const slot=under?.closest?.(".slot");
+    if(slot) slot.classList.add("over");
+    e.preventDefault();
+  }, {passive:false});
+  card.addEventListener("touchend", e=>{
+    if(!touchDragging) return;
+    const t=e.changedTouches[0];
+    const under=document.elementFromPoint(t.clientX,t.clientY);
+    const slot=under?.closest?.(".slot");
+    document.querySelectorAll(".slot").forEach(s=>s.classList.remove("over"));
+    if(slot) dropItem(c.id,c.type,slot);
+    if(touchClone) touchClone.remove();
+    touchClone=null;
+    touchDragging=false;
+    if(!card.classList.contains("used")) card.style.opacity="";
+    e.preventDefault();
+  }, {passive:false});
+  card.addEventListener("touchcancel", ()=>{
+    document.querySelectorAll(".slot").forEach(s=>s.classList.remove("over"));
+    if(touchClone) touchClone.remove();
+    touchClone=null;
+    touchDragging=false;
+    if(!card.classList.contains("used")) card.style.opacity="";
+  });
   target.appendChild(card);
 }
 shuffle(data.map(s=>({id:s.id,type:"photo",text:s.img}))).forEach(c=>addCard(c,photoPool));
